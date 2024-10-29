@@ -1,17 +1,51 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from typing import List
 
 from utils import *
 
 
 # Algorytm naiwny bez filtracji:
-def naive_nondominated_sort(X):
+# def naive_nondominated_sort(X):
+#     n = len(X)
+#     P = []
+#     dominated = [False] * n  # Tablica śledząca, czy punkt został zdominowany
+
+#     comp_cnt = ComparisonCounter()
+
+#     for i in range(n):
+#         if dominated[i]:
+#             continue  # Jeśli punkt jest już zdominowany, pomijamy go
+#         Y = X[i]
+#         for j in range(n):
+#             if i == j or dominated[j]:
+#                 continue
+
+#             comp_cnt.comparison_count_points += 1
+
+#             # print(f"Iter ({i}, {j}) | Y={Y} Xj={X[j]}")
+#             if (comp_cnt.le(Y[0], X[j][0]) and
+#                 comp_cnt.le(Y[1], X[j][1])):
+#                 # Y dominuje X[j]
+#                 # print(f"Del Xj! | Y{Y} <= Xj{X[j]}")
+#                 dominated[j] = True
+#             elif (comp_cnt.le(X[j][0], Y[0]) and
+#                   comp_cnt.le(X[j][1], Y[1])):
+#                 # X[j] dominuje Y
+#                 # print(f"Del Y! | Xj{X[j]} <= Y{Y}")
+#                 dominated[i] = True
+#                 break  # Nie ma sensu dalej sprawdzać, Y jest zdominowany
+#         if not dominated[i]:
+#             P.append(Y)  # Dodajemy Y do listy punktów niezdominowanych
+
+#     return P, comp_cnt.comparison_count_points, comp_cnt.comparison_count_coords
+def naive_nondominated_sort(X: List["Point"]):
     n = len(X)
     P = []
     dominated = [False] * n  # Tablica śledząca, czy punkt został zdominowany
 
-    comp_cnt = ComparisonCounter()
+    
 
     for i in range(n):
         if dominated[i]:
@@ -21,16 +55,12 @@ def naive_nondominated_sort(X):
             if i == j or dominated[j]:
                 continue
 
-            comp_cnt.comparison_count_points += 1
-
             # print(f"Iter ({i}, {j}) | Y={Y} Xj={X[j]}")
-            if (comp_cnt.le(Y[0], X[j][0]) and
-                comp_cnt.le(Y[1], X[j][1])):
+            if Y <= X[j]:
                 # Y dominuje X[j]
                 # print(f"Del Xj! | Y{Y} <= Xj{X[j]}")
                 dominated[j] = True
-            elif (comp_cnt.le(X[j][0], Y[0]) and
-                  comp_cnt.le(X[j][1], Y[1])):
+            elif X[j] <= Y:
                 # X[j] dominuje Y
                 # print(f"Del Y! | Xj{X[j]} <= Y{Y}")
                 dominated[i] = True
@@ -38,31 +68,29 @@ def naive_nondominated_sort(X):
         if not dominated[i]:
             P.append(Y)  # Dodajemy Y do listy punktów niezdominowanych
 
-    return P, comp_cnt.comparison_count_points, comp_cnt.comparison_count_coords
+    return P
 
 
 
 # Algorytm naiwny z filtracją punktow zdominowanych:
-def nondominated_sort_with_filtering(X):
+def nondominated_sort_with_filtering(X: List["Point"]):
     P = []  # Lista punktów niezdominowanych
     X_list = X.copy()  # Kopia listy X, aby nie modyfikować oryginału
 
-    comp_cnt = ComparisonCounter()
 
     while len(X_list) > 0:
         Y = X_list[0]  # Wybieramy pierwszy punkt z listy
         i = 1
         while i < len(X_list):
             X_j = X_list[i]
-            comp_cnt.comparison_count_points += 1
 
             # Sprawdzenie czy Y dominuje X_j
-            if (comp_cnt.le(Y[0], X_j[0]) and
-                comp_cnt.le(Y[1], X_j[1])):
+            # if (comp_cnt.le(Y[0], X_j[0]) and
+            #     comp_cnt.le(Y[1], X_j[1])):
+            if Y <= X_j:
                 # Y dominuje X_j
                 X_list.pop(i)
-            elif (comp_cnt.le(X_j[0], Y[0]) and
-                  comp_cnt.le(X_j[1], Y[1])):
+            elif X_j <= Y:
                 # X_j dominuje Y
                 X_list.pop(0)  # Usuwamy Y
                 Y = X_j  # Aktualizujemy Y
@@ -77,9 +105,7 @@ def nondominated_sort_with_filtering(X):
         while i < len(X_list):
             point = X_list[i]
             # Sprawdzanie, czy Y dominuje point
-            comp_cnt.comparison_count_points += 1
-            if (comp_cnt.le(Y[0], point[0]) and
-                comp_cnt.le(Y[1], point[1])):
+            if Y <= point:
                 X_list.pop(i)
             else:
                 i += 1
@@ -92,17 +118,15 @@ def nondominated_sort_with_filtering(X):
         if len(X_list) == 1:
             P.append(X_list[0])
             break
-    return P, comp_cnt.comparison_count_points, comp_cnt.comparison_count_coords
+    return P
 
 
 
 # Przykład błędnego wyniku w przypadku usunięcia X(i) i pominięcia filtracji
-def naive_nondominated_sort_without_filtering(X):
+def naive_nondominated_sort_without_filtering(X: List["Point"]):
     n = len(X)
     P = []
     X_list = X.copy()
-
-    comp_cnt = ComparisonCounter()
 
     i = 0
     while i < len(X_list):
@@ -111,9 +135,7 @@ def naive_nondominated_sort_without_filtering(X):
         for j in range(len(X_list)):
             if i == j:
                 continue
-            comp_cnt.comparison_count_points += 1
-            if (comp_cnt.le(X_list[j][0], Y[0]) and
-                comp_cnt.le(X_list[j][1], Y[1])):
+            if X_list[j] <= Y:
                 # X_list[j] dominuje Y
                 is_dominated = True
                 break
@@ -121,28 +143,26 @@ def naive_nondominated_sort_without_filtering(X):
             P.append(Y)
         # Usuwamy Y z listy, ale nie filtrujemy zdominowanych punktów
         X_list.pop(i)
-    return P, comp_cnt.comparison_count_points, comp_cnt.comparison_count_coords
+    return P
 
 
 
 # Algorytm naiwny oparty o punkt idealny (szkic):
-def calculate_ideal_point(X):
+def calculate_ideal_point(X: List["Point"]):
     k = len(X[0])  # Wymiar przestrzeni
-    xmin = [min(point[i] for point in X) for i in range(k)]
+    xmin = Point(k, [min(point[i] for point in X) for i in range(k)], X[0].compariser)
     return xmin
 
-def calculate_distances(X, xmin):
+def calculate_distances(X: List["Point"], xmin):
     distances = []
     for idx, point in enumerate(X):
-        dist = sum((point[i] - xmin[i]) ** 2 for i in range(len(xmin)))
+        dist = point.distance_to(xmin)
         distances.append((dist, idx))
     return distances
 
-def ideal_point_algorithm(X):
-    P = []  # Lista punktów niezdominowanych
+def ideal_point_algorithm(X: List["Point"]) -> List[Point]:
+    P: List[Point] = []  # Lista punktów niezdominowanych
     X_set = set(X)  # Zbiór punktów do przetworzenia
-
-    comp_cnt = ComparisonCounter()
 
     xmin = calculate_ideal_point(X)
 
@@ -160,9 +180,7 @@ def ideal_point_algorithm(X):
         dominated_points = set()
         for point in X_set:
             if point != current_point:
-                comp_cnt.comparison_count_points += 1
-                if (comp_cnt.le(current_point[0], point[0]) and
-                    comp_cnt.le(current_point[1], point[1])):
+                if current_point <= point:
                     dominated_points.add(point)
         X_set -= dominated_points
         # Dodawanie current_point do P
@@ -176,5 +194,5 @@ def ideal_point_algorithm(X):
             if remaining_point not in P:
                 P.append(remaining_point)
             break
-    return P, comp_cnt.comparison_count_points, comp_cnt.comparison_count_coords
+    return P
 

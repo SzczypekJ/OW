@@ -48,9 +48,10 @@ class ComparisonCounter:
         return x > y
 
 class Point:
-    def __init__(self, number_of_cryteria: int, point_coordinates: np.ndarray[float], compariser: "ComparisonCounter") -> None:
+    def __init__(self, number_of_cryteria: int, point_coordinates: np.ndarray[float], compariser: "ComparisonCounter") -> "Point":
         self.number_of_cryteria = number_of_cryteria
-        self.vector = point_coordinates
+        # self.vector = np.array(point_coordinates)
+        self.vector = tuple(point_coordinates)
 
         self.compariser = compariser
 
@@ -60,11 +61,13 @@ class Point:
         # Less than: returns True if self is lexicographically smaller than other
         if not isinstance(other, Point) or self.number_of_cryteria != other.number_of_cryteria:
             return NotImplemented
+        
+        self.compariser.count_point_comparison()
 
         # Compare Points
         is_lt = True
         for i in range(len(self.vector)):
-            if not self.comparer.lt(self.vector[i], other.vector[i]):
+            if not self.compariser.lt(self.vector[i], other.vector[i]):
                 is_lt = False
                 break
 
@@ -74,11 +77,13 @@ class Point:
         # Less than or equal: returns True if self is lexicographically smaller or equal to other
         if not isinstance(other, Point) or self.number_of_cryteria != other.number_of_cryteria:
             return NotImplemented
+        
+        self.compariser.count_point_comparison()
 
         # Compare Points
         is_le = True
         for i in range(len(self.vector)):
-            if not self.comparer.le(self.vector[i], other.vector[i]):
+            if not self.compariser.le(self.vector[i], other.vector[i]):
                 is_le = False
                 break
 
@@ -88,10 +93,13 @@ class Point:
         # Equality: returns True if all coordinates are equal
         if not isinstance(other, Point) or self.number_of_cryteria != other.number_of_cryteria:
             return False
+        
+        self.compariser.count_point_comparison()
 
+        # Compare Points
         is_eq = True
         for i in range(len(self.vector)):
-            if not self.comparer.eq(self.vector[i], other.vector[i]):
+            if not self.compariser.eq(self.vector[i], other.vector[i]):
                 is_eq = False
                 break
 
@@ -101,10 +109,13 @@ class Point:
         # Inequality: returns True if not equal
         if not isinstance(other, Point) or self.number_of_cryteria != other.number_of_cryteria:
             return True
+        
+        self.compariser.count_point_comparison()
 
+        # Compare Points
         is_ne = False
         for i in range(len(self.vector)):
-            if self.comparer.ne(self.vector[i], other.vector[i]):
+            if self.compariser.ne(self.vector[i], other.vector[i]):
                 is_ne = True
                 break
 
@@ -114,10 +125,13 @@ class Point:
         # Greater than or equal: returns True if self is lexicographically larger or equal to other
         if not isinstance(other, Point) or self.number_of_cryteria != other.number_of_cryteria:
             return NotImplemented
+        
+        self.compariser.count_point_comparison()
 
+        # Compare Points
         is_ge = True
         for i in range(len(self.vector)):
-            if not self.comparer.ge(self.vector[i], other.vector[i]):
+            if not self.compariser.ge(self.vector[i], other.vector[i]):
                 is_ge = False
                 break
 
@@ -127,10 +141,13 @@ class Point:
         # Greater than: returns True if self is lexicographically larger than other
         if not isinstance(other, Point) or self.number_of_cryteria != other.number_of_cryteria:
             return NotImplemented
+        
+        self.compariser.count_point_comparison()
 
+        # Compare Points
         is_gt = True
         for i in range(len(self.vector)):
-            if not self.comparer.gt(self.vector[i], other.vector[i]):
+            if not self.compariser.gt(self.vector[i], other.vector[i]):
                 is_gt = False
                 break
 
@@ -138,6 +155,18 @@ class Point:
 
     def __repr__(self) -> str:
         return f"Point({self.vector})"
+    
+    def __len__(self) -> int:
+        return len(self.vector)
+    
+    def __getitem__(self, key) -> Any:
+        return self.vector[key]
+    
+    def __hash__(self) -> Any:
+        return hash(self.vector)
+    
+    def distance_to(self, other: "Point") -> Any:
+        return np.sqrt(np.sum( (self[i] - other[i])**2 for i in range(len(self)) ))
     
 
 if __name__ == "__main__":
