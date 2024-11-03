@@ -1,12 +1,18 @@
 from algorithms import *
 from utils import *
 import time
-import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
 
 if __name__ == "__main__":
     # 1
     # Przykładowe dane
-    X = [(5,5), (3,6), (4,4), (5,3), (3,3), (1,8), (3,4), (4,5), (3,10), (6,6), (4,1), (3,5)]
+    # X = [(5, 5, 0), (3, 6, -1), (4, 4, 2), (5, 3, -2), (3, 3, 1), (1, 8, -1), (3, 4, 0), (4, 5, 1), (3, 10, 2), (6, 6, -3), (4, 1, 1), (3, 5, -2)]
+    X = [(5,5), (3,6), (4,4), (5,3), (3,3), (1,8), (3,4), (4,5), (3,10), (6,6), (4, 1), (3, 5)] 
+    
+
+    # X = Gauss(10, 3)
     # X1 = Gauss(5000, 7)
     # X2 = Exponential(5000, 7)
     # X3 = Poisson(5000, 7)
@@ -16,8 +22,9 @@ if __name__ == "__main__":
 
     # Compariser with counter
     compariser1 = ComparisonCounter()
+    number_of_criteria = len(X[0])
     # Create a list of points for optimisation
-    X_points = [Point(2, point_coords, compariser1) for point_coords in X]
+    X_points = [Point(number_of_criteria , point_coords, compariser1) for point_coords in X]
 
     # 1
     start = time.perf_counter_ns()
@@ -27,7 +34,9 @@ if __name__ == "__main__":
     print("Punkty niezdominowane P(X):")
     # for point in P:
     #     print(point)
-    print(points_to_numpy_array(P))
+    P_nondominated = points_to_numpy_array(P)
+    print(P_nondominated)
+    plot_points_with_nondominated(X, P_nondominated)
     alg1_count_points = compariser1.comparison_count_points
     alg1_count_coords = compariser1.comparison_count_coords
     alg1_time = (stop-start)/10**6

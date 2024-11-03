@@ -1,5 +1,7 @@
 from typing import Any, List
 import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 class ComparisonCounter:
     def __init__(self):
@@ -180,6 +182,42 @@ def Poisson(number_of_cols: int, number_of_rows: int, lam: int = 2) -> np.ndarra
 
 def points_to_numpy_array(points_list: List["Point"]) -> np.ndarray:
     return np.array([point.vector for point in points_list])
+
+def plot_points_with_nondominated(X, P_nondominated):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.mplot3d import Axes3D
+    
+    X = np.array(X)
+    P_nondominated = np.array(P_nondominated)
+    
+    num_criteria = X.shape[1]
+    
+    if num_criteria == 2:
+        # Plotowanie 2D
+        plt.scatter(X[:, 0], X[:, 1], c='skyblue', label='Zbiór punktów')
+        plt.scatter(P_nondominated[:, 0], P_nondominated[:, 1], c='red', label='Punkty niezdominowane', s=100, edgecolor='k')
+        
+        plt.xlabel('Kryterium 1')
+        plt.ylabel('Kryterium 2')
+        plt.title('Wizualizacja punktów z zaznaczonymi punktami niezdominowanymi (2D)')
+        plt.legend()
+        plt.show()
+    elif num_criteria == 3:
+        # Plotowanie 3D
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter(X[:, 0], X[:, 1], X[:, 2], c='skyblue', label='Zbiór punktów')
+        ax.scatter(P_nondominated[:, 0], P_nondominated[:, 1], P_nondominated[:, 2], c='red', label='Punkty niezdominowane', s=100, edgecolor='k')
+        
+        ax.set_xlabel('Kryterium 1')
+        ax.set_ylabel('Kryterium 2')
+        ax.set_zlabel('Kryterium 3')
+        ax.set_title('Wizualizacja punktów z zaznaczonymi punktami niezdominowanymi (3D)')
+        ax.legend()
+        plt.show()
+    else:
+        raise ValueError("Liczba kryteriów musi być równa 2 lub 3, aby można było wykonać wykres.")
 
 
 
