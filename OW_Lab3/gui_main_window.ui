@@ -251,11 +251,8 @@
        <attribute name="title">
         <string>Wyniki</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="2,1">
-        <item>
-         <widget class="MplWidget" name="mpl_widget" native="true"/>
-        </item>
-        <item>
+       <layout class="QGridLayout" name="gridLayout_5" columnstretch="2,1">
+        <item row="1" column="1">
          <widget class="QPlainTextEdit" name="outputText">
           <property name="readOnly">
            <bool>true</bool>
@@ -264,6 +261,16 @@
            <string>hvjhvjvjvj</string>
           </property>
          </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="plotButton">
+          <property name="text">
+           <string>Pokaż wykres</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="2">
+         <widget class="MplWidget" name="mpl_widget" native="true"/>
         </item>
        </layout>
       </widget>

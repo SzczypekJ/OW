@@ -191,21 +191,26 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
-        self.horizontalLayout_4 = QHBoxLayout(self.tab_2)
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.mpl_widget = MplWidget(self.tab_2)
-        self.mpl_widget.setObjectName(u"mpl_widget")
-
-        self.horizontalLayout_4.addWidget(self.mpl_widget)
-
+        self.gridLayout_5 = QGridLayout(self.tab_2)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.outputText = QPlainTextEdit(self.tab_2)
         self.outputText.setObjectName(u"outputText")
         self.outputText.setReadOnly(True)
 
-        self.horizontalLayout_4.addWidget(self.outputText)
+        self.gridLayout_5.addWidget(self.outputText, 1, 1, 1, 1)
 
-        self.horizontalLayout_4.setStretch(0, 2)
-        self.horizontalLayout_4.setStretch(1, 1)
+        self.plotButton = QPushButton(self.tab_2)
+        self.plotButton.setObjectName(u"plotButton")
+
+        self.gridLayout_5.addWidget(self.plotButton, 0, 1, 1, 1)
+
+        self.mpl_widget = MplWidget(self.tab_2)
+        self.mpl_widget.setObjectName(u"mpl_widget")
+
+        self.gridLayout_5.addWidget(self.mpl_widget, 0, 0, 2, 1)
+
+        self.gridLayout_5.setColumnStretch(0, 2)
+        self.gridLayout_5.setColumnStretch(1, 1)
         self.tabWidget.addTab(self.tab_2, "")
 
         self.horizontalLayout.addWidget(self.tabWidget)
@@ -264,6 +269,7 @@ class Ui_MainWindow(object):
 
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Wprowadzanie danych", None))
         self.outputText.setPlainText(QCoreApplication.translate("MainWindow", u"hvjhvjvjvj", None))
+        self.plotButton.setText(QCoreApplication.translate("MainWindow", u"Poka\u017c wykres", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Wyniki", None))
     # retranslateUi
 
