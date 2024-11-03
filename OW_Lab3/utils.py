@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 import numpy as np
 
 class ComparisonCounter:
@@ -169,16 +169,18 @@ class Point:
         return np.sqrt(np.sum( (self[i] - other[i])**2 for i in range(len(self)) ))
 
 
-def Gauss(number_of_cols, number_of_rows, mean=3, std_dev=2.5):
+def Gauss(number_of_cols: int, number_of_rows: int, mean: float = 3.0, std_dev: float = 2.5) -> np.ndarray:
     return np.random.normal(mean, std_dev, size=(number_of_rows, number_of_cols))
 
-
-def Exponential(number_of_cols, number_of_rows, scale=1.0):
+def Exponential(number_of_cols: int, number_of_rows: int, scale: float = 1.0) -> np.ndarray:
     return np.random.exponential(scale, size=(number_of_rows, number_of_cols))
 
-
-def Poisson(number_of_cols, number_of_rows, lam=2):
+def Poisson(number_of_cols: int, number_of_rows: int, lam: int = 2) -> np.ndarray:
     return np.random.poisson(lam, size=(number_of_rows, number_of_cols))
+
+def points_to_numpy_array(points_list: List["Point"]) -> np.ndarray:
+    return np.array([point.vector for point in points_list])
+
 
 
 if __name__ == "__main__":
