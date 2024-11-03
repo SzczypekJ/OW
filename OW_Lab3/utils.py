@@ -219,6 +219,18 @@ def plot_points_with_nondominated(X, P_nondominated):
     else:
         raise ValueError("Liczba kryteriów musi być równa 2 lub 3, aby można było wykonać wykres.")
 
+def print_algorithm_metrics(count_points, count_coords, time_ms):
+    print(f"Porównania pary punktów: {count_points}")
+    print(f"Porównania pary współrzędnych: {count_coords}")
+    print(f"Czas: {time_ms:.3f} [ms]")
+
+def print_algorithm_summary_table(results):
+    print("Algorytm |  Por. pkt |  Por. wsp.  | Czas [ms] | Non-dominated count")
+    print("-" * 55)
+
+    for result in results:
+        print(f"{result['name']:8} | {result['count_points']:10} | {result['count_coords']:10} | {result['time']:9.3f} | {result['nondominated_count']:8}")
+
 
 
 if __name__ == "__main__":
