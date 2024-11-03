@@ -167,7 +167,19 @@ class Point:
     
     def distance_to(self, other: "Point") -> Any:
         return np.sqrt(np.sum( (self[i] - other[i])**2 for i in range(len(self)) ))
-    
+
+
+def Gauss(number_of_cols, number_of_rows, mean=3, std_dev=2.5):
+    return np.random.normal(mean, std_dev, size=(number_of_rows, number_of_cols))
+
+
+def Exponential(number_of_cols, number_of_rows, scale=1.0):
+    return np.random.exponential(scale, size=(number_of_rows, number_of_cols))
+
+
+def Poisson(number_of_cols, number_of_rows, lam=2):
+    return np.random.poisson(lam, size=(number_of_rows, number_of_cols))
+
 
 if __name__ == "__main__":
     print(np.array((1, 2, 3)) < np.array((0, 3, 4)))

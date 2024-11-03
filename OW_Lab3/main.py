@@ -7,8 +7,13 @@ if __name__ == "__main__":
     # 1
     # Przykładowe dane
     # X = [(5,5), (3,6), (4,4), (5,3), (3,3), (1,8), (3,4), (4,5), (3,10), (6,6), (4,1), (3,5)]
-    X = np.random.normal(3, 2.5, size=(5000, 7))
-    
+    X1 = Gauss(5000, 7)
+    X2 = Exponential(5000, 7)
+    X3 = Poisson(5000, 7)
+    print("Gauss:\n", X1)
+    print("Exponential:\n", X1)
+    print("Poisson:\n", X1)
+
     # Compariser with counter
     compariser1 = ComparisonCounter()
     # Create a list of points for optimisation
