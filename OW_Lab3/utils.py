@@ -199,8 +199,8 @@ def plot_points_with_nondominated(X, P_nondominated):
         plt.scatter(X[:, 0], X[:, 1], c='skyblue', label='Zbiór punktów')
         plt.scatter(P_nondominated[:, 0], P_nondominated[:, 1], c='red', label='Punkty niezdominowane', s=100, edgecolor='k')
         
-        plt.xlabel('Kryterium 1')
-        plt.ylabel('Kryterium 2')
+        plt.xlabel('Kryt. 1')
+        plt.ylabel('Kryt. 2')
         plt.title('Wizualizacja punktów z zaznaczonymi punktami niezdominowanymi (2D)')
         plt.legend()
         plt.show()
@@ -211,40 +211,62 @@ def plot_points_with_nondominated(X, P_nondominated):
         ax.scatter(X[:, 0], X[:, 1], X[:, 2], c='skyblue', label='Zbiór punktów')
         ax.scatter(P_nondominated[:, 0], P_nondominated[:, 1], P_nondominated[:, 2], c='red', label='Punkty niezdominowane', s=100, edgecolor='k')
         
-        ax.set_xlabel('Kryterium 1')
-        ax.set_ylabel('Kryterium 2')
-        ax.set_zlabel('Kryterium 3')
+        ax.set_xlabel('Kryt. 1')
+        ax.set_ylabel('Kryt. 2')
+        ax.set_zlabel('Kryt. 3')
         ax.set_title('Wizualizacja punktów z zaznaczonymi punktami niezdominowanymi (3D)')
         ax.legend()
         plt.show()
     else:
         raise ValueError("Liczba kryteriów musi być równa 2 lub 3, aby można było wykonać wykres.")
 
-def print_algorithm_metrics(count_points, count_coords, time_ms):
-    print(f"Porównania pary punktów: {count_points}")
-    print(f"Porównania pary współrzędnych: {count_coords}")
-    print(f"Czas: {time_ms:.3f} [ms]")
+def algorithm_metrics_string(count_points, count_coords, time_ms):
+    out_text  = f"Porównania pary punktów: {count_points}\n"
+    out_text += f"Porównania pary współrzędnych: {count_coords}\n"
+    out_text += f"Czas: {time_ms:.3f} [ms]\n"
+    return out_text
 
-def print_algorithm_summary_table(results):
-    print("Algorytm |  Por. pkt |  Por. wsp.  | Czas [ms] | Non-dominated count")
-    print("-" * 55)
+def algorithm_summary_table_string(results):
+    out_text  = "     Algorytm   |  Por. pkt  |  Por. wsp. | Czas [ms] | Non-dominated count\n"
+    out_text += "-" * 65 + "\n"
 
     for result in results:
-        print(f"{result['name']:8} | {result['count_points']:10} | {result['count_coords']:10} | {result['time']:9.3f} | {result['nondominated_count']:8}")
+        out_text += f"{result['name']:15} | {result['count_points']:10} | {result['count_coords']:10} | {result['time']:9.3f} | {result['nondominated_count']:8}\n"
+    
+    return out_text
 
-def run_algorithm(X_points, algorithm, compariser, algorithm_name):
+def run_algorithm(X, algorithm, compariser, algorithm_name):
+    # Ustalamy liczbę kryteriów
+    number_of_criteria = len(X[0])
+    X_points = [Point(number_of_criteria, point_coords, compariser) for point_coords in X]
+    
     compariser.reset_counters()
     start = time.perf_counter_ns()
-    P = algorithm(X_points)
+    P: List[Point] = algorithm(X_points)
     stop = time.perf_counter_ns()
     count_points = compariser.comparison_count_points
     count_coords = compariser.comparison_count_coords
     time_ms = (stop - start) / 10**6
     nondominated_count = len(P)
-    print(f"Wyniki dla {algorithm_name}:")
-    print_algorithm_metrics(count_points, count_coords, time_ms)
-    print()
-    return P, count_points, count_coords, time_ms, nondominated_count
+    
+    out_text  = f"Wyniki dla {algorithm_name}:\n"
+    out_text += algorithm_metrics_string(count_points, count_coords, time_ms)
+
+    # convert Points to numpy for output
+    P_out = points_to_numpy_array(P)
+
+    result_dict = {
+        "nondominated_points": P_out,
+        "name": algorithm_name,
+        "count_points": count_points,
+        "count_coords": count_coords,
+        "time": time_ms,
+        "nondominated_count": nondominated_count
+    }
+
+    return result_dict, out_text
+
+
 
 if __name__ == "__main__":
     print(np.array((1, 2, 3)) < np.array((0, 3, 4)))

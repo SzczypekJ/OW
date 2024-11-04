@@ -135,63 +135,32 @@ if __name__ == "__main__":
     # Ustalamy liczbę kryteriów
     number_of_criteria = len(X[0])
     # Tworzymy listę punktów do optymalizacji
-    X_points = [Point(number_of_criteria, point_coords, compariser1) for point_coords in X]
+    # X_points = [Point(number_of_criteria, point_coords, compariser1) for point_coords in X]
 
     # Lista do przechowywania wyników
     results = []
 
     # Algorytm 1: Naive Non-dominated Sort (NNDS)
-    P1, alg1_count_points, alg1_count_coords, alg1_time, alg1_nondominated_count = run_algorithm(
-        X_points, naive_nondominated_sort, compariser1, "1. NNDS"
-    )
-    results.append({
-        "name": "1. NNDS",
-        "count_points": alg1_count_points,
-        "count_coords": alg1_count_coords,
-        "time": alg1_time,
-        "nondominated_count": alg1_nondominated_count
-    })
+    result_dict, out_text = run_algorithm(X, naive_nondominated_sort, compariser1, "1. NNDS")
+    results.append(result_dict)
 
     # Algorytm 2: Non-dominated Sort with Filtering
-    P2, alg2_count_points, alg2_count_coords, alg2_time, alg2_nondominated_count = run_algorithm(
-        X_points, nondominated_sort_with_filtering, compariser1, "2. Filt"
-    )
-    results.append({
-        "name": "2. Filt",
-        "count_points": alg2_count_points,
-        "count_coords": alg2_count_coords,
-        "time": alg2_time,
-        "nondominated_count": alg2_nondominated_count
-    })
+    result_dict, out_text = run_algorithm(X, nondominated_sort_with_filtering, compariser1, "2. Filt")
+    results.append(result_dict)
 
     # Algorytm 3: Naive Non-dominated Sort without Filtering (błędny)
-    P3, alg3_count_points, alg3_count_coords, alg3_time, alg3_nondominated_count = run_algorithm(
-        X_points, naive_nondominated_sort_without_filtering, compariser1, "3. Wrong"
-    )
-    results.append({
-        "name": "3. Wrong",
-        "count_points": alg3_count_points,
-        "count_coords": alg3_count_coords,
-        "time": alg3_time,
-        "nondominated_count": alg3_nondominated_count
-    })
+    result_dict, out_text = run_algorithm(X, naive_nondominated_sort_without_filtering, compariser1, "3. Wrong")
+    results.append(result_dict)
 
     # Algorytm 4: Ideal Point Algorithm
-    P4, alg4_count_points, alg4_count_coords, alg4_time, alg4_nondominated_count = run_algorithm(
-        X_points, ideal_point_algorithm, compariser1, "4. Ideal"
-    )
-    results.append({
-        "name": "4. Ideal",
-        "count_points": alg4_count_points,
-        "count_coords": alg4_count_coords,
-        "time": alg4_time,
-        "nondominated_count": alg4_nondominated_count
-    })
+    result_dict, out_text = run_algorithm(X, ideal_point_algorithm, compariser1, "4. Ideal")
+    results.append(result_dict)
 
     # Wyświetlamy podsumowanie wyników w formie tabeli
-    print_algorithm_summary_table(results)
+    print(algorithm_summary_table_string(results))
 
     # Opcjonalnie: wizualizacja wyników dla jednego z algorytmów
     # Na przykład dla P1
-    P_nondominated = points_to_numpy_array(P1)
-    plot_points_with_nondominated(X, P_nondominated)
+    print(results[0]["nondominated_points"])
+    # P_nondominated = points_to_numpy_array(results[0]["nondominated_points"])
+    plot_points_with_nondominated(X, results[0]["nondominated_points"])
