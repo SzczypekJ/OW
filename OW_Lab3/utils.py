@@ -252,6 +252,8 @@ def run_algorithm(X, algorithm, compariser, algorithm_name):
     out_text  = f"Wyniki dla {algorithm_name}:\n"
     out_text += algorithm_metrics_string(count_points, count_coords, time_ms)
 
+    print(out_text)
+
     # convert Points to numpy for output
     P_out = points_to_numpy_array(P)
 

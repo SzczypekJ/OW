@@ -163,7 +163,8 @@ class MainWindow(QMainWindow):
         ]
         
         self._results = []
-        out_text_all = f"Liczba punktów: {len(data)}\n\n"
+        out_text_all  = f"Liczba punktów:   {len(data)}\n"
+        out_text_all += f"Liczba kryteriów: {len(data[0])}\n\n"
 
         for algorithm, name in algorithm_list:
             self._compariser.reset_counters()  # Reset comparison counter for each algorithm
@@ -197,6 +198,7 @@ class MainWindow(QMainWindow):
                                         ylabel='Kryt. 2',
                                         title='Wizualizacja punktów z zaznaczonymi punktami niezdominowanymi (2D)')
             self.ui.mpl_widget.axis.legend()
+            self.ui.mpl_widget.axis.grid()
         elif num_criteria == 3:
             # Plotowanie 3D
             self.ui.mpl_widget.set_projection_3D()

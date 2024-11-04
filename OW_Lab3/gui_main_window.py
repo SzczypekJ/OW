@@ -93,7 +93,7 @@ class Ui_MainWindow(object):
         self.spinBoxObjectCount = QSpinBox(self.generationGroup)
         self.spinBoxObjectCount.setObjectName(u"spinBoxObjectCount")
         self.spinBoxObjectCount.setMinimum(2)
-        self.spinBoxObjectCount.setMaximum(999999)
+        self.spinBoxObjectCount.setMaximum(999999999)
         self.spinBoxObjectCount.setValue(10)
 
         self.gridLayout.addWidget(self.spinBoxObjectCount, 1, 2, 1, 1)
