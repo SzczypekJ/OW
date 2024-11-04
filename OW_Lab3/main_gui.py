@@ -163,7 +163,7 @@ class MainWindow(QMainWindow):
         ]
         
         self._results = []
-        out_text_all = ""
+        out_text_all = f"Liczba punktów: {len(data)}\n\n"
 
         for algorithm, name in algorithm_list:
             self._compariser.reset_counters()  # Reset comparison counter for each algorithm
