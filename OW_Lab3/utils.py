@@ -2,6 +2,7 @@ from typing import Any, List
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import time
 
 class ComparisonCounter:
     def __init__(self):
@@ -231,7 +232,19 @@ def print_algorithm_summary_table(results):
     for result in results:
         print(f"{result['name']:8} | {result['count_points']:10} | {result['count_coords']:10} | {result['time']:9.3f} | {result['nondominated_count']:8}")
 
-
+def run_algorithm(X_points, algorithm, compariser, algorithm_name):
+    compariser.reset_counters()
+    start = time.perf_counter_ns()
+    P = algorithm(X_points)
+    stop = time.perf_counter_ns()
+    count_points = compariser.comparison_count_points
+    count_coords = compariser.comparison_count_coords
+    time_ms = (stop - start) / 10**6
+    nondominated_count = len(P)
+    print(f"Wyniki dla {algorithm_name}:")
+    print_algorithm_metrics(count_points, count_coords, time_ms)
+    print()
+    return P, count_points, count_coords, time_ms, nondominated_count
 
 if __name__ == "__main__":
     print(np.array((1, 2, 3)) < np.array((0, 3, 4)))
