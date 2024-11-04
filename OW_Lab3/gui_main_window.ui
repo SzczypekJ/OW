@@ -61,6 +61,26 @@
                  <string>Kierunek</string>
                 </property>
                </column>
+               <item row="0" column="0">
+                <property name="text">
+                 <string>Kryt1</string>
+                </property>
+               </item>
+               <item row="0" column="1">
+                <property name="text">
+                 <string>Min</string>
+                </property>
+               </item>
+               <item row="1" column="0">
+                <property name="text">
+                 <string>Kryt2</string>
+                </property>
+               </item>
+               <item row="1" column="1">
+                <property name="text">
+                 <string>Min</string>
+                </property>
+               </item>
               </widget>
              </item>
             </layout>
@@ -80,14 +100,14 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QSpinBox" name="spinBoxMean">
+              <widget class="QSpinBox" name="spinBoxDistributionParam1">
                <property name="suffix">
                 <string> Średnia</string>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QSpinBox" name="spinBoxSort1"/>
+              <widget class="QSpinBox" name="spinBoxDistributionParam2"/>
              </item>
              <item row="1" column="2">
               <widget class="QSpinBox" name="spinBoxObjectCount">
@@ -181,12 +201,12 @@
                <row/>
                <column>
                 <property name="text">
-                 <string>Kryterium 1</string>
+                 <string>Kryt1</string>
                 </property>
                </column>
                <column>
                 <property name="text">
-                 <string>Kryterium 2</string>
+                 <string>Kryt2</string>
                 </property>
                </column>
               </widget>

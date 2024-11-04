@@ -66,6 +66,14 @@ class Ui_MainWindow(object):
         self.criteriaTable.setHorizontalHeaderItem(1, __qtablewidgetitem1)
         if (self.criteriaTable.rowCount() < 2):
             self.criteriaTable.setRowCount(2)
+        __qtablewidgetitem2 = QTableWidgetItem()
+        self.criteriaTable.setItem(0, 0, __qtablewidgetitem2)
+        __qtablewidgetitem3 = QTableWidgetItem()
+        self.criteriaTable.setItem(0, 1, __qtablewidgetitem3)
+        __qtablewidgetitem4 = QTableWidgetItem()
+        self.criteriaTable.setItem(1, 0, __qtablewidgetitem4)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        self.criteriaTable.setItem(1, 1, __qtablewidgetitem5)
         self.criteriaTable.setObjectName(u"criteriaTable")
 
         self.gridLayout_3.addWidget(self.criteriaTable, 0, 0, 1, 2)
@@ -82,15 +90,15 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.buttonGenerate, 3, 0, 1, 1)
 
-        self.spinBoxMean = QSpinBox(self.generationGroup)
-        self.spinBoxMean.setObjectName(u"spinBoxMean")
+        self.spinBoxDistributionParam1 = QSpinBox(self.generationGroup)
+        self.spinBoxDistributionParam1.setObjectName(u"spinBoxDistributionParam1")
 
-        self.gridLayout.addWidget(self.spinBoxMean, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.spinBoxDistributionParam1, 1, 0, 1, 1)
 
-        self.spinBoxSort1 = QSpinBox(self.generationGroup)
-        self.spinBoxSort1.setObjectName(u"spinBoxSort1")
+        self.spinBoxDistributionParam2 = QSpinBox(self.generationGroup)
+        self.spinBoxDistributionParam2.setObjectName(u"spinBoxDistributionParam2")
 
-        self.gridLayout.addWidget(self.spinBoxSort1, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.spinBoxDistributionParam2, 1, 1, 1, 1)
 
         self.spinBoxObjectCount = QSpinBox(self.generationGroup)
         self.spinBoxObjectCount.setObjectName(u"spinBoxObjectCount")
@@ -139,10 +147,10 @@ class Ui_MainWindow(object):
         self.valuesTable = QTableWidget(self.valuesEditor)
         if (self.valuesTable.columnCount() < 2):
             self.valuesTable.setColumnCount(2)
-        __qtablewidgetitem2 = QTableWidgetItem()
-        self.valuesTable.setHorizontalHeaderItem(0, __qtablewidgetitem2)
-        __qtablewidgetitem3 = QTableWidgetItem()
-        self.valuesTable.setHorizontalHeaderItem(1, __qtablewidgetitem3)
+        __qtablewidgetitem6 = QTableWidgetItem()
+        self.valuesTable.setHorizontalHeaderItem(0, __qtablewidgetitem6)
+        __qtablewidgetitem7 = QTableWidgetItem()
+        self.valuesTable.setHorizontalHeaderItem(1, __qtablewidgetitem7)
         if (self.valuesTable.rowCount() < 10):
             self.valuesTable.setRowCount(10)
         self.valuesTable.setObjectName(u"valuesTable")
@@ -244,9 +252,22 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"Nazwa", None));
         ___qtablewidgetitem1 = self.criteriaTable.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("MainWindow", u"Kierunek", None));
+
+        __sortingEnabled = self.criteriaTable.isSortingEnabled()
+        self.criteriaTable.setSortingEnabled(False)
+        ___qtablewidgetitem2 = self.criteriaTable.item(0, 0)
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Kryt1", None));
+        ___qtablewidgetitem3 = self.criteriaTable.item(0, 1)
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Min", None));
+        ___qtablewidgetitem4 = self.criteriaTable.item(1, 0)
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("MainWindow", u"Kryt2", None));
+        ___qtablewidgetitem5 = self.criteriaTable.item(1, 1)
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("MainWindow", u"Min", None));
+        self.criteriaTable.setSortingEnabled(__sortingEnabled)
+
         self.generationGroup.setTitle(QCoreApplication.translate("MainWindow", u"Generacja", None))
         self.buttonGenerate.setText(QCoreApplication.translate("MainWindow", u"Generuj", None))
-        self.spinBoxMean.setSuffix(QCoreApplication.translate("MainWindow", u" \u015arednia", None))
+        self.spinBoxDistributionParam1.setSuffix(QCoreApplication.translate("MainWindow", u" \u015arednia", None))
         self.spinBoxObjectCount.setSuffix(QCoreApplication.translate("MainWindow", u" Liczba obiekt\u00f3w", None))
         self.buttonSort.setText(QCoreApplication.translate("MainWindow", u"Sortuj", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Rozk\u0142ad", None))
@@ -255,10 +276,10 @@ class Ui_MainWindow(object):
         self.distributionComboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Poissona", None))
 
         self.valuesEditor.setTitle(QCoreApplication.translate("MainWindow", u"Edytor warto\u015bci", None))
-        ___qtablewidgetitem2 = self.valuesTable.horizontalHeaderItem(0)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("MainWindow", u"Kryterium 1", None));
-        ___qtablewidgetitem3 = self.valuesTable.horizontalHeaderItem(1)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("MainWindow", u"Kryterium 2", None));
+        ___qtablewidgetitem6 = self.valuesTable.horizontalHeaderItem(0)
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"Kryt1", None));
+        ___qtablewidgetitem7 = self.valuesTable.horizontalHeaderItem(1)
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Kryt2", None));
         self.actionsGroup.setTitle(QCoreApplication.translate("MainWindow", u"Akcje", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Algorytm", None))
         self.buttonSolve.setText(QCoreApplication.translate("MainWindow", u"Rozwi\u0105\u017c", None))
