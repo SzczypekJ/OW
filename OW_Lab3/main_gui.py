@@ -1,9 +1,12 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 import sys
-from gui_main_window import Ui_MainWindow  # Import the generated UI class
 
 import numpy as np
+import matplotlib.pyplot as plt
+
+from gui_main_window import Ui_MainWindow  # Import the generated UI class
 import utils
+import algorithms
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -14,6 +17,9 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)  # Populate the main window with the UI elements
         
         self.connect_ui_elements()
+
+        # Create a comparison counter
+        self._compariser = utils.ComparisonCounter()
 
         # Access UI elements
         # self.ui.myButton.clicked.connect(self.on_button_click)
@@ -28,6 +34,10 @@ class MainWindow(QMainWindow):
         # Connect button signals to the methods
         self.ui.buttonAddCriteria.clicked.connect(self.add_criteria)
         self.ui.buttonRemoveCriteria.clicked.connect(self.remove_criteria)
+
+        # Connect buttons to methods
+        self.ui.buttonSolve.clicked.connect(self.run_solve)
+        self.ui.buttonBenchmark.clicked.connect(self.run_benchmark)
 
 
     def add_criteria(self):
@@ -91,21 +101,121 @@ class MainWindow(QMainWindow):
         param2 = self.ui.spinBoxDistributionParam2.value()
 
         if distribution_type == "Gaussa":
-            self._data = utils.Gauss(criteria_count, object_count, param1, param2)
+            self._data_X = utils.Gauss(criteria_count, object_count, param1, param2)
         elif distribution_type == "Eksponencjalny":
-            self._data = utils.Exponential(criteria_count, object_count, param1)
+            self._data_X = utils.Exponential(criteria_count, object_count, param1)
         elif distribution_type == "Poissona":
-            self._data = utils.Poisson(criteria_count, object_count, param1)
+            self._data_X = utils.Poisson(criteria_count, object_count, param1)
 
-        print(self._data)
+        print(self._data_X)
+
+        # Call the method to display the generated data in valuesTable
+        self.display_data_in_values_table()
+
+
+    def display_data_in_values_table(self):
+        """Display the generated data in the valuesTable."""
+        # Clear existing data in valuesTable
+        self.ui.valuesTable.setRowCount(0)  # Clear any existing rows
+        self.ui.valuesTable.setColumnCount(self._data_X.shape[1])  # Set the column count based on data
+
+        # Populate the table with the data
+        for row_idx in range(self._data_X.shape[0]):
+            self.ui.valuesTable.insertRow(row_idx)  # Insert a new row for each data point
+            for col_idx in range(self._data_X.shape[1]):
+                item = QTableWidgetItem(f"{self._data_X[row_idx, col_idx]:.4f}")  # Convert the data to string
+                self.ui.valuesTable.setItem(row_idx, col_idx, item)  # Set the item in the table
+
+
+    def run_solve(self):
+        """
+        Handles the solve button click event.
+        Executes the selected algorithm from the combo box.
+        """
+        selected_algorithm = self.ui.algorithmComboBox.currentText()  # Get the selected algorithm from comboBox
+        
+        # Prepare data for the algorithm
+        data = self._data_X  # Assuming _data is defined and contains the necessary points
+
+        if selected_algorithm == "Bez filtracji":
+            result_dict, out_text = utils.run_algorithm(data, algorithms.naive_nondominated_sort, compariser=self._compariser, algorithm_name="Bez filtracji")
+        elif selected_algorithm == "Z Filtracja":
+            result_dict, out_text = utils.run_algorithm(data, algorithms.nondominated_sort_with_filtering, compariser=self._compariser, algorithm_name="Z Filtracja")
+        elif selected_algorithm == "Punkt idealny":
+            result_dict, out_text = utils.run_algorithm(data, algorithms.ideal_point_algorithm, compariser=self._compariser, algorithm_name="Punkt idealny")
+        else:
+            print("Unknown algorithm selected.")
+            return
+        self._results = [result_dict]
+        self.output_text(out_text)
+        
+    
+    def run_benchmark(self):
+        """
+        Handles the benchmark button click event.
+        Executes all three algorithms and measures their performance.
+        """
+        data = self._data_X  # Assuming _data is defined and contains the necessary points
+        algorithm_list = [
+            (algorithms.naive_nondominated_sort, "Bez filtracji"),
+            (algorithms.nondominated_sort_with_filtering, "Z Filtracja"),
+            (algorithms.ideal_point_algorithm, "Punkt idealny"),
+        ]
+        
+        self._results = []
+        out_text_all = ""
+
+        for algorithm, name in algorithm_list:
+            self._compariser.reset_counters()  # Reset comparison counter for each algorithm
+            result_dict, out_text = utils.run_algorithm(data, algorithm, compariser=self._compariser, algorithm_name=name)
+            self._results.append(result_dict)
+            # Add results of one algorithm to output
+            out_text_all += out_text + "\n"
+            
+        # Add comparison table
+        out_text_all += utils.algorithm_summary_table_string(self._results)
+        # Display all results in outputText
+        self.output_text(out_text_all)
+        
+
 
     def refresh_plot(self):
         self.ui.mpl_widget.axis.clear()  # Clear any existing plot
-        self.ui.mpl_widget.axis.plot(self._data)  # Plot new data
+        
+        X = np.array(self._data_X)
+        P_nondominated = np.array(self._results[0]["nondominated_points"])
+        
+        num_criteria = X.shape[1]
+        
+        if num_criteria == 2:
+            # Plotowanie 2D
+            self.ui.mpl_widget.set_projection_2D()
+            self.ui.mpl_widget.axis.scatter(X[:, 0], X[:, 1], c='skyblue', label='Zbiór punktów')
+            self.ui.mpl_widget.axis.scatter(P_nondominated[:, 0], P_nondominated[:, 1], c='red', label='Punkty niezdominowane', s=100, edgecolor='k')
+            
+            self.ui.mpl_widget.axis.set(xlabel='Kryt. 1',
+                                        ylabel='Kryt. 2',
+                                        title='Wizualizacja punktów z zaznaczonymi punktami niezdominowanymi (2D)')
+            self.ui.mpl_widget.axis.legend()
+        elif num_criteria == 3:
+            # Plotowanie 3D
+            self.ui.mpl_widget.set_projection_3D()
+            self.ui.mpl_widget.axis.scatter(X[:, 0], X[:, 1], X[:, 2], c='skyblue', label='Zbiór punktów')
+            self.ui.mpl_widget.axis.scatter(P_nondominated[:, 0], P_nondominated[:, 1], P_nondominated[:, 2], c='red', label='Punkty niezdominowane', s=100, edgecolor='k')
+            
+            self.ui.mpl_widget.axis.set(xlabel='Kryt. 1',
+                                        ylabel='Kryt. 2',
+                                        zlabel='Kryt. 3',
+                                        title='Wizualizacja punktów z zaznaczonymi punktami niezdominowanymi (3D)')
+            self.ui.mpl_widget.axis.legend()
+        else:
+            self.ui.mpl_widget.set_projection_2D()
+            self.ui.mpl_widget.axis.text(0.5, 0.5, "Brak możliwości wykresu przy wymiarach większych od 3D", ha='center', va='center')
+        
         self.ui.mpl_widget.canvas.draw()  # Render the updated plot
 
-    def output_text(self, output_text):
-        self.ui.outputText.setPlainText(output_text)
+    def output_text(self, text):
+        self.ui.outputText.setPlainText(text)
 
 
 if __name__ == "__main__":

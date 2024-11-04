@@ -16,11 +16,11 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QGroupBox,
-    QHBoxLayout, QHeaderView, QLabel, QMainWindow,
-    QMenuBar, QPlainTextEdit, QPushButton, QSizePolicy,
-    QSpinBox, QStatusBar, QTabWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QGridLayout,
+    QGroupBox, QHBoxLayout, QHeaderView, QLabel,
+    QMainWindow, QMenuBar, QPlainTextEdit, QPushButton,
+    QSizePolicy, QSpinBox, QStatusBar, QTabWidget,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 from mplwidget import MplWidget
 
@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1370, 804)
+        MainWindow.resize(1582, 861)
         self.menuFile = QAction(MainWindow)
         self.menuFile.setObjectName(u"menuFile")
         self.centralwidget = QWidget(MainWindow)
@@ -90,21 +90,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.buttonGenerate, 3, 0, 1, 1)
 
-        self.spinBoxDistributionParam1 = QSpinBox(self.generationGroup)
-        self.spinBoxDistributionParam1.setObjectName(u"spinBoxDistributionParam1")
-
-        self.gridLayout.addWidget(self.spinBoxDistributionParam1, 1, 0, 1, 1)
-
-        self.spinBoxDistributionParam2 = QSpinBox(self.generationGroup)
-        self.spinBoxDistributionParam2.setObjectName(u"spinBoxDistributionParam2")
-
-        self.gridLayout.addWidget(self.spinBoxDistributionParam2, 1, 1, 1, 1)
-
         self.spinBoxObjectCount = QSpinBox(self.generationGroup)
         self.spinBoxObjectCount.setObjectName(u"spinBoxObjectCount")
         self.spinBoxObjectCount.setMinimum(2)
         self.spinBoxObjectCount.setMaximum(999999)
-        self.spinBoxObjectCount.setValue(25)
+        self.spinBoxObjectCount.setValue(10)
 
         self.gridLayout.addWidget(self.spinBoxObjectCount, 1, 2, 1, 1)
 
@@ -131,6 +121,20 @@ class Ui_MainWindow(object):
         self.distributionComboBox.setObjectName(u"distributionComboBox")
 
         self.gridLayout.addWidget(self.distributionComboBox, 0, 1, 1, 1)
+
+        self.spinBoxDistributionParam2 = QDoubleSpinBox(self.generationGroup)
+        self.spinBoxDistributionParam2.setObjectName(u"spinBoxDistributionParam2")
+        self.spinBoxDistributionParam2.setSingleStep(0.500000000000000)
+        self.spinBoxDistributionParam2.setValue(0.500000000000000)
+
+        self.gridLayout.addWidget(self.spinBoxDistributionParam2, 1, 1, 1, 1)
+
+        self.spinBoxDistributionParam1 = QDoubleSpinBox(self.generationGroup)
+        self.spinBoxDistributionParam1.setObjectName(u"spinBoxDistributionParam1")
+        self.spinBoxDistributionParam1.setSingleStep(0.500000000000000)
+        self.spinBoxDistributionParam1.setValue(1.000000000000000)
+
+        self.gridLayout.addWidget(self.spinBoxDistributionParam1, 1, 0, 1, 1)
 
 
         self.verticalLayout_2.addWidget(self.generationGroup)
@@ -203,6 +207,10 @@ class Ui_MainWindow(object):
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.outputText = QPlainTextEdit(self.tab_2)
         self.outputText.setObjectName(u"outputText")
+        font = QFont()
+        font.setFamilies([u"Consolas"])
+        font.setItalic(False)
+        self.outputText.setFont(font)
         self.outputText.setReadOnly(True)
 
         self.gridLayout_5.addWidget(self.outputText, 1, 1, 1, 1)
@@ -217,7 +225,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.mpl_widget, 0, 0, 2, 1)
 
-        self.gridLayout_5.setColumnStretch(0, 2)
+        self.gridLayout_5.setColumnStretch(0, 1)
         self.gridLayout_5.setColumnStretch(1, 1)
         self.tabWidget.addTab(self.tab_2, "")
 
@@ -226,7 +234,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QMenuBar(MainWindow)
         self.menuBar.setObjectName(u"menuBar")
-        self.menuBar.setGeometry(QRect(0, 0, 1370, 33))
+        self.menuBar.setGeometry(QRect(0, 0, 1582, 33))
         MainWindow.setMenuBar(self.menuBar)
         self.statusBar = QStatusBar(MainWindow)
         self.statusBar.setObjectName(u"statusBar")
@@ -243,7 +251,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"gui", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Optymalizacja Wielokryterialna lab3", None))
         self.menuFile.setText(QCoreApplication.translate("MainWindow", u"Plik", None))
         self.criteriaEditor.setTitle(QCoreApplication.translate("MainWindow", u"Edytor kryteri\u00f3w", None))
         self.buttonAddCriteria.setText(QCoreApplication.translate("MainWindow", u"Dodaj", None))
@@ -267,7 +275,6 @@ class Ui_MainWindow(object):
 
         self.generationGroup.setTitle(QCoreApplication.translate("MainWindow", u"Generacja", None))
         self.buttonGenerate.setText(QCoreApplication.translate("MainWindow", u"Generuj", None))
-        self.spinBoxDistributionParam1.setSuffix(QCoreApplication.translate("MainWindow", u" \u015arednia", None))
         self.spinBoxObjectCount.setSuffix(QCoreApplication.translate("MainWindow", u" Liczba obiekt\u00f3w", None))
         self.buttonSort.setText(QCoreApplication.translate("MainWindow", u"Sortuj", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"Rozk\u0142ad", None))
@@ -285,11 +292,11 @@ class Ui_MainWindow(object):
         self.buttonSolve.setText(QCoreApplication.translate("MainWindow", u"Rozwi\u0105\u017c", None))
         self.buttonBenchmark.setText(QCoreApplication.translate("MainWindow", u"Benchmark", None))
         self.algorithmComboBox.setItemText(0, QCoreApplication.translate("MainWindow", u"Bez filtracji", None))
-        self.algorithmComboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Z Filtracj\u0105", None))
+        self.algorithmComboBox.setItemText(1, QCoreApplication.translate("MainWindow", u"Z Filtracja", None))
         self.algorithmComboBox.setItemText(2, QCoreApplication.translate("MainWindow", u"Punkt idealny", None))
 
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Wprowadzanie danych", None))
-        self.outputText.setPlainText(QCoreApplication.translate("MainWindow", u"hvjhvjvjvj", None))
+        self.outputText.setPlainText(QCoreApplication.translate("MainWindow", u"Tutaj b\u0119d\u0105 wyniki", None))
         self.plotButton.setText(QCoreApplication.translate("MainWindow", u"Poka\u017c wykres", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Wyniki", None))
     # retranslateUi

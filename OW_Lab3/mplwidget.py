@@ -27,8 +27,17 @@ class MplWidget(QWidget):
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
         self.axis = self.figure.add_subplot(111)
+        self.figure.canvas = self.canvas
         # self.axis.set_position(self.default_pos)
         
         # Put Canvas in widget layout
         self.vertical_layout = QVBoxLayout(self)
         self.vertical_layout.addWidget(self.canvas)
+
+    def set_projection_2D(self):
+        self.axis.remove()
+        self.axis = self.figure.add_subplot(111)
+
+    def set_projection_3D(self):
+        self.axis.remove()
+        self.axis = self.figure.add_subplot(111, projection='3d')

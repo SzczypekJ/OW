@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1370</width>
-    <height>804</height>
+    <width>1582</width>
+    <height>861</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>gui</string>
+   <string>Optymalizacja Wielokryterialna lab3</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
@@ -99,16 +99,6 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QSpinBox" name="spinBoxDistributionParam1">
-               <property name="suffix">
-                <string> Średnia</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="spinBoxDistributionParam2"/>
-             </item>
              <item row="1" column="2">
               <widget class="QSpinBox" name="spinBoxObjectCount">
                <property name="suffix">
@@ -121,7 +111,7 @@
                 <number>999999</number>
                </property>
                <property name="value">
-                <number>25</number>
+                <number>10</number>
                </property>
               </widget>
              </item>
@@ -163,6 +153,26 @@
                  <string>Poissona</string>
                 </property>
                </item>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="spinBoxDistributionParam2">
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QDoubleSpinBox" name="spinBoxDistributionParam1">
+               <property name="singleStep">
+                <double>0.500000000000000</double>
+               </property>
+               <property name="value">
+                <double>1.000000000000000</double>
+               </property>
               </widget>
              </item>
             </layout>
@@ -250,7 +260,7 @@
                </item>
                <item>
                 <property name="text">
-                 <string>Z Filtracją</string>
+                 <string>Z Filtracja</string>
                 </property>
                </item>
                <item>
@@ -271,14 +281,20 @@
        <attribute name="title">
         <string>Wyniki</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5" columnstretch="2,1">
+       <layout class="QGridLayout" name="gridLayout_5" columnstretch="1,1">
         <item row="1" column="1">
          <widget class="QPlainTextEdit" name="outputText">
+          <property name="font">
+           <font>
+            <family>Consolas</family>
+            <italic>false</italic>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
           <property name="plainText">
-           <string>hvjhvjvjvj</string>
+           <string>Tutaj będą wyniki</string>
           </property>
          </widget>
         </item>
@@ -303,7 +319,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1370</width>
+     <width>1582</width>
      <height>33</height>
     </rect>
    </property>
